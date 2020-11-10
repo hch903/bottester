@@ -1,0 +1,16 @@
+{
+  "name": "bottester",
+  "version": "0.0.1",
+  "description": "test framework for chatbot",
+  "main": "index.js",
+  "repository": "https://github.com/hch903/bottester.git",
+  "author": "hch903",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "bottender": "^1.4.10",
+    "express": "^4.17.1",
+    "node-request-interceptor": "^0.5.3",
+    "supertest": "^6.0.1"
+  }
+}
