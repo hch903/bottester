@@ -2,15 +2,29 @@
   "name": "bottester",
   "version": "0.0.1",
   "description": "test framework for chatbot",
-  "main": "index.js",
-  "repository": "https://github.com/hch903/bottester.git",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hch903/bottester.git"
+  },
   "author": "hch903",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "compile": "tsc --build tsconfig.json",
+    "compile:clean": "tsc --build tsconfig.json --clean"
+  },
   "dependencies": {
+    "@types/supertest": "^2.0.10",
     "bottender": "^1.4.10",
     "express": "^4.17.1",
     "node-request-interceptor": "^0.5.3",
     "supertest": "^6.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.5"
+  },
+  "engines": {
+    "node": ">=8"
   }
 }

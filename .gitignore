@@ -1,4 +1,11 @@
+# Ignore the compiled output.
+dist/
+
+# Mac OS
 .DS_Store
 
-/node_modules
+# Node modules
+node_modules/
 
+# TypeScript incremental compilation cache
+*.tsbuildinfo
