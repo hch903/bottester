@@ -1,46 +1,54 @@
-import crypto from 'crypto'
-import request from 'supertest';
 import express from 'express';
-import { MessengerEventType, MessengerHttpPostRequestType } from './type';
+import { MessengerEventType } from './type';
+import { sendEvent as MessengerSendEvent} from './mock';
 
 const timestamp = Date.now();
 
-async function sendRequest(
-  server: express.Application | void,
-  body: MessengerHttpPostRequestType
-) {
-  const signature = produceSignature(body);
-  return request(server)
-    .post('/webhooks/messenger')
-    .set('X-Hub-Signature', signature)
-    .send(body);
-}
-
-function produceSignature(
-  body: MessengerHttpPostRequestType
-) {
-  let signature = crypto
-    .createHmac('sha1', process.env.MESSENGER_APP_SECRET)
-    .update(JSON.stringify(body), 'utf8')
-    .digest()
-    .toString('hex');
-  signature = 'sha1=' + signature;
-  return signature;
-}
-
-export async function sendEvent(
+async function sendEvent(
   server: express.Application | void,
   event: MessengerEventType
 ) {
-  const body = {
-    'object': 'page',
-    'entry': [
-      {
-        'id': process.env.MESSENGER_PAGE_ID,
-        'time': timestamp,
-        'messaging': [event]
-      }
-    ]
-  };
-  return sendRequest(server, body);
+  return MessengerSendEvent(server, event);
+}
+
+export async function sendMessengerTextEvent (
+  server: express.Application | void,
+  psid: string,
+  messengerPageId: string,
+  text: string
+) {
+  return sendEvent(server, {
+    'sender': {
+      'id': psid
+    },
+    'recipient': {
+      'id': messengerPageId
+    },
+    'timestamp': timestamp,
+    'message': {
+      'text': text,
+    }
+  })
+}
+
+export async function sendMessengerPayloadEvent (
+  server: express.Application | void,
+  psid: string,
+  messengerPageId: string,
+  title: string,
+  payload: string
+) {
+  return sendEvent(server, {
+    'sender': {
+      'id': psid
+    },
+    'recipient': {
+      'id': messengerPageId
+    },
+    'timestamp': timestamp,
+    'postback': {
+      'title': title,
+      'payload': payload
+    }
+  }) 
 }

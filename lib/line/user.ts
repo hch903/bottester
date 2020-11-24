@@ -1,7 +1,7 @@
-import userInterface from '../interface/user';
-import { LineUserType } from './LineType';
+import UserInterface from '../interface/user';
+import { LineUserType } from './type';
 
-class LineUser implements userInterface<LineUserType> {
+class LineUser implements UserInterface<LineUserType> {
   users: LineUserType[] = [];
 
   getUserInfo(

@@ -39,13 +39,11 @@ type MessengerEventType =
 
 type MessengerHttpPostRequestType = {
   'object': string,
-  'entry': [
-    {
-      'id': string,
-      'time': number,
-      'messaging': MessengerEventType[]
-    }
-  ]
+  'entry': {
+    'id': string,
+    'time': number,
+    'messaging': MessengerEventType[]
+  }[]
 }
 
 export {

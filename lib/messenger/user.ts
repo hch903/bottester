@@ -1,7 +1,7 @@
-import userInterface from '../interface/user';
-import { MessengerUserType } from './MessengerType';
+import UserInterface from '../interface/user';
+import { MessengerUserType } from './type';
 
-class MessengerUser implements userInterface<MessengerUserType> {
+class MessengerUser implements UserInterface<MessengerUserType> {
   users: MessengerUserType[] = [];
 
   getUserInfo(
@@ -13,7 +13,7 @@ class MessengerUser implements userInterface<MessengerUserType> {
     if (userInfo !== undefined) {
       return userInfo;
     } else {
-      throw new Error('unregistered psid');
+      throw new Error('unregistered psid!!');
     }
   }
 
