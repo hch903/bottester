@@ -2,8 +2,6 @@ export {
   setup
 } from './core/test';
 
-export { default as Interceptor } from './core/interceptor';
-
 export { default as MessengerUser } from './messenger/user';
 export { default as MessengerInterceptor } from './messenger/interceptor';
 
