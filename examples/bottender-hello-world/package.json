@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "dev": "bottender dev",
+    "start": "bottender start",
+    "test": "jest",
+    "testonly:watch": "jest --watch"
+  },
+  "dependencies": {
+    "bottender": "latest",
+    "jest": "latest"
+  },
+  "devDependencies": {}
+}
