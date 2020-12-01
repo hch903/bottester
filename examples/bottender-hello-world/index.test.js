@@ -9,9 +9,19 @@ const lineUser = new testing.LineUser();
 const mInterceptor = new testing.MessengerInterceptor(messengerUser);
 const lInterceptor = new testing.LineInterceptor(lineUser);
 
-describe('Hello World!', () => {
+beforeEach(() => {
+  mInterceptor.use();
+  lInterceptor.use();
+})
+
+afterEach(() => {
+  mInterceptor.restore();
+  lInterceptor.restore();
+});
+
+describe('Hello World', () => {
   // messenger
-  it('should reply "Hi! Mike Trout"', async () => {
+  it('should reply "Hello World"', async () => {
     const { server } = testing.setup();
     
     await testing.sendMessengerTextEvent(server, PSID, process.env.MESSENGER_PAGE_ID, "Hi");
@@ -29,7 +39,7 @@ describe('Hello World!', () => {
   });
 
   // line
-  it('should reply "Hi! Luke Kennard"', async () => {
+  it('should reply "Hello World"', async () => {
     const { server } = testing.setup();
     
     await testing.sendLineTextEvent(server, userId, "Hi");
