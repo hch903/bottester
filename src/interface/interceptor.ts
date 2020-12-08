@@ -8,7 +8,7 @@ export default interface Interceptor<T> {
 
   user: UserInterface<T>;
 
-  // setUser(platform: string, user: UserInterface<UserType>): void;
   use(): void;
   restore(): void;
+  response(): string;
 }

@@ -3,7 +3,7 @@ import withDefaultInterceptors from 'node-request-interceptor/lib/presets/defaul
 
 import InterceptorInterface from '../interface/interceptor';
 import UserInterface from '../interface/user';
-import { LineUserType } from './type';
+import { LineUserType, LineReturnMsgObject } from './type';
 
 class LineInterceptor implements InterceptorInterface<LineUserType>{
   interceptor: RequestInterceptor = new RequestInterceptor(withDefaultInterceptors);
@@ -54,6 +54,18 @@ class LineInterceptor implements InterceptorInterface<LineUserType>{
       }
       return;
     })
+  }
+
+  response() {
+    const body = this.calledRequests.pop()?.body;
+    if(body) {
+      const res: LineReturnMsgObject = JSON.parse(body);
+      const returnMsg = res.messages.pop();
+        if(returnMsg?.type === 'text') {
+          return returnMsg.text;
+        }
+    }
+    return 'error';
   }
 
   restore() {

@@ -3,7 +3,7 @@ import withDefaultInterceptors from 'node-request-interceptor/lib/presets/defaul
 
 import InterceptorInterface from '../interface/interceptor';
 import UserInterface from '../interface/user';
-import { MessengerUserType } from './type';
+import { MessengerUserType, MessengerReturnMsgObject } from './type';
 
 class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
   interceptor: RequestInterceptor = new RequestInterceptor(withDefaultInterceptors);
@@ -54,6 +54,17 @@ class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
       }
       return;
     })
+  }
+
+  response() {
+    const body = this.calledRequests.pop()?.body;
+    if(body) {
+      const res:MessengerReturnMsgObject = JSON.parse(body);
+      if(res.messaging_type === 'RESPONSE') {
+        return res.message.text;
+      }
+    }
+    return 'error';
   }
 
   restore() {

@@ -18,7 +18,7 @@ type LineTextEventType = {
   'message': {
     'type': string,
     'id': string,
-    'text':string 
+    'text': string 
   }
 }
 type LineEventType = 
@@ -29,9 +29,17 @@ type LineHttpPostRequestType = {
   'events': LineEventType[]
 }
 
+type LineReturnMsgObject = {
+  'messages': {
+    'text': string,
+    'type': string,
+  }[],
+  'replyToken': string
+}
 
 export {
   LineUserType,
   LineEventType,
-  LineHttpPostRequestType
+  LineHttpPostRequestType,
+  LineReturnMsgObject
 };

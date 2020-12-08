@@ -46,8 +46,19 @@ type MessengerHttpPostRequestType = {
   }[]
 }
 
+type MessengerReturnMsgObject = {
+  "message": {
+    "text": string,
+  },
+  "messaging_type": string,
+  "recipient": {
+    "id": string,
+  },
+}
+
 export {
   MessengerUserType,
   MessengerEventType,
-  MessengerHttpPostRequestType
+  MessengerHttpPostRequestType,
+  MessengerReturnMsgObject
 };
