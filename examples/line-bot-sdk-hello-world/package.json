@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "testonly:watch": "jest --watch"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "latest",
+    "express": "latest",
+    "jest": "latest"
+  },
+  "devDependencies": {}
+}
