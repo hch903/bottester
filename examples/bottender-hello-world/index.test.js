@@ -24,18 +24,10 @@ describe('Hello World', () => {
   it('should reply "Hello World"', async () => {
     const { server } = testing.setup();
     
-    await testing.sendMessengerTextEvent(server, PSID, process.env.MESSENGER_PAGE_ID, "Hi");
-    const res = mInterceptor.calledRequests.pop().body;
-    
-    expect(JSON.parse(res)).toEqual({
-      "message": {
-        "text": "Hello World!",
-      },
-      "messaging_type": "RESPONSE",
-      "recipient": {
-        "id": "0000000000000000",
-      },
-    })
+    await testing.sendMessengerTextEvent(server, PSID, process.env.MESSENGER_PAGE_ID, "Hi"); //拆解成兩行
+    // 底下結合成Hello World
+    const res = mInterceptor.response();
+    expect(res).toEqual('Hello World!');
   });
 
   // line
@@ -43,16 +35,7 @@ describe('Hello World', () => {
     const { server } = testing.setup();
     
     await testing.sendLineTextEvent(server, userId, "Hi");
-    const res = lInterceptor.calledRequests.pop().body;
-    
-    expect(JSON.parse(res)).toEqual({
-      "messages": [
-        {
-          "text": "Hello World!",
-          "type": "text",
-        },
-      ],
-      "replyToken": "replyToken",
-    })
+    const res = lInterceptor.response();
+    expect(res).toEqual('Hello World!');
   });
 });
