@@ -3,7 +3,7 @@ import withDefaultInterceptors from 'node-request-interceptor/lib/presets/defaul
 
 import InterceptorInterface from '../interface/interceptor';
 import UserInterface from '../interface/user';
-import { LineUserType, LineReturnMsgObject } from './type';
+import { LineUserType } from './type';
 
 class LineInterceptor implements InterceptorInterface<LineUserType>{
   interceptor: RequestInterceptor = new RequestInterceptor(withDefaultInterceptors);
@@ -15,13 +15,6 @@ class LineInterceptor implements InterceptorInterface<LineUserType>{
   };
 
   use() {
-    // this.interceptor.use((req) => {
-    //   // Will print to stdout any outgoing requests
-    //   // without affecting their responses
-    //   console.log(req.method, req.url);
-    //   console.log({ headers: req.headers, body: req.body });
-    // });
-
     this.interceptor.use((req) => {
       if(['https://api.line.me'].includes(req.url.origin)) {
         this.calledRequests.push(req);
@@ -57,15 +50,16 @@ class LineInterceptor implements InterceptorInterface<LineUserType>{
   }
 
   response() {
-    const body = this.calledRequests.pop()?.body;
+    return this.calledRequests[this.calledRequests.length - 1].body;
+  }
+
+  parse() {
+    const body = this.response();
     if(body) {
-      const res: LineReturnMsgObject = JSON.parse(body);
-      const returnMsg = res.messages.pop();
-        if(returnMsg?.type === 'text') {
-          return returnMsg.text;
-        }
+      return JSON.parse(body);
+    } else {
+      throw Error;
     }
-    return 'error';
   }
 
   restore() {

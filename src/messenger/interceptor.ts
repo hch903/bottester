@@ -3,7 +3,7 @@ import withDefaultInterceptors from 'node-request-interceptor/lib/presets/defaul
 
 import InterceptorInterface from '../interface/interceptor';
 import UserInterface from '../interface/user';
-import { MessengerUserType, MessengerReturnMsgObject } from './type';
+import { MessengerUserType } from './type';
 
 class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
   interceptor: RequestInterceptor = new RequestInterceptor(withDefaultInterceptors);
@@ -15,13 +15,6 @@ class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
   };
 
   use() {
-    // this.interceptor.use((req) => {
-    //   // Will print to stdout any outgoing requests
-    //   // without affecting their responses
-    //   console.log(req.method, req.url);
-    //   console.log({ headers: req.headers, body: req.body });
-    // });
-
     this.interceptor.use((req) => {
       if(['https://graph.facebook.com'].includes(req.url.origin)) {
         this.calledRequests.push(req);
@@ -57,14 +50,16 @@ class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
   }
 
   response() {
-    const body = this.calledRequests.pop()?.body;
+    return this.calledRequests[this.calledRequests.length - 1].body;
+  }
+
+  parse() {
+    const body = this.response();
     if(body) {
-      const res:MessengerReturnMsgObject = JSON.parse(body);
-      if(res.messaging_type === 'RESPONSE') {
-        return res.message.text;
-      }
+      return JSON.parse(body);
+    } else {
+      throw Error;
     }
-    return 'error';
   }
 
   restore() {

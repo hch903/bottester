@@ -1,6 +1,5 @@
 import { InterceptedRequest, RequestInterceptor } from 'node-request-interceptor';
 import UserInterface from './user';
-// import { UserType } from '../core/type';
 
 export default interface Interceptor<T> {
   calledRequests: InterceptedRequest[];
@@ -10,5 +9,6 @@ export default interface Interceptor<T> {
 
   use(): void;
   restore(): void;
-  response(): string;
+  response(): string | undefined;
+  parse(): any;
 }
