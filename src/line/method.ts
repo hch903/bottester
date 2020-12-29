@@ -1,13 +1,13 @@
 
 import express from 'express';
 
-import CoreMethod from '../core/method';
+import CoreMethod from '../interface/method';
 import { LineEventType } from './type';
-import { sendEvent as LineSendEvent} from './mock';
+import { sendEvent as LineSendEvent } from './mock';
 
 const timestamp = Date.now();
 
-class LineMethod extends CoreMethod<LineEventType> {
+class LineUserMethod implements CoreMethod<LineEventType> {
   async sendEvent(
     server: express.Application | void,
     event: LineEventType
@@ -40,4 +40,4 @@ class LineMethod extends CoreMethod<LineEventType> {
   }
 }
 
-export default LineMethod;
+export default LineUserMethod;

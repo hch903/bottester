@@ -1,12 +1,12 @@
 import express from 'express';
 
-import CoreMethod from '../core/method';
+import CoreMethod from '../interface/method';
 import { MessengerEventType } from './type';
-import { sendEvent as MessengerSendEvent} from './mock';
+import { sendEvent as MessengerSendEvent } from './mock';
 
 const timestamp = Date.now();
 
-class MessengerMethod extends CoreMethod<MessengerEventType> {
+class MessengerUserMethod implements CoreMethod<MessengerEventType> {
   async sendEvent(
     server: express.Application | void,
     event: MessengerEventType
@@ -57,4 +57,4 @@ class MessengerMethod extends CoreMethod<MessengerEventType> {
   }
 }
 
-export default MessengerMethod;
+export default MessengerUserMethod;

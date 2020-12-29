@@ -2,16 +2,16 @@ import { InterceptedRequest, RequestInterceptor } from 'node-request-interceptor
 import withDefaultInterceptors from 'node-request-interceptor/lib/presets/default';
 
 import InterceptorInterface from '../interface/interceptor';
-import UserInterface from '../interface/user';
-import { LineUserType } from './type';
+import UserCollection from '../interface/userCollection';
+import LineUser from './user';
 
-class LineInterceptor implements InterceptorInterface<LineUserType>{
+class LineInterceptor implements InterceptorInterface<LineUser>{
   interceptor: RequestInterceptor = new RequestInterceptor(withDefaultInterceptors);
   calledRequests: InterceptedRequest[] = [];
-  user: UserInterface<LineUserType>;
+  users: UserCollection<LineUser>;
 
-  constructor(user: UserInterface<LineUserType>) {
-    this.user = user;
+  constructor(users: UserCollection<LineUser>) {
+    this.users = users;
   };
 
   use() {
@@ -22,7 +22,7 @@ class LineInterceptor implements InterceptorInterface<LineUserType>{
         // Ex: `/v2/bot/profile/${userId}`
         if (req.url.pathname.match(/^\/v[0-9]\/bot\/profile\/U[0-9a-f]{32}/)) {
           const userId = req.url.pathname.split('/')[4];
-          const userInfo = this.user.getUserInfo(userId);
+          const userInfo = this.users.getUserInfo(userId);
           return {
             status: 200,
             headers: {
@@ -49,12 +49,12 @@ class LineInterceptor implements InterceptorInterface<LineUserType>{
     })
   }
 
-  response() {
+  getLastReceivedJsonString() {
     return this.calledRequests[this.calledRequests.length - 1].body;
   }
 
-  parse() {
-    const body = this.response();
+  getLastReceivedJsonBody() {
+    const body = this.getLastReceivedJsonString();
     if(body) {
       return JSON.parse(body);
     } else {

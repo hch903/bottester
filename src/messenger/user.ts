@@ -1,43 +1,26 @@
-import UserInterface from '../interface/user';
+import express from 'express';
+import User from '../interface/user';
 import { MessengerUserType } from './type';
+import MessengerUserMethod from './method';
 
-class MessengerUser implements UserInterface<MessengerUserType> {
-  users: MessengerUserType[] = [];
-
-  getUserInfo(
-    psid: string
+class MessengerUser implements User<MessengerUserType, MessengerUserMethod> {
+  info: MessengerUserType;
+  _method: MessengerUserMethod;
+  _server: express.Application | void;
+  
+  constructor(
+    userInfo: MessengerUserType,
+    server: express.Application | void;
   ) {
-    const userInfo = this.users.find((item) => {
-      return item.psid === psid;
-    })
-    if (userInfo !== undefined) {
-      return userInfo;
-    } else {
-      throw new Error('unregistered psid!!');
-    }
+    this.info = userInfo;
+    this._method = new MessengerUserMethod();
+    this._server = server;
   }
 
-  register(
-    userInfo: MessengerUserType
+  sendText(
+    text: string
   ) {
-    this.users.push(userInfo);
-  }
-
-  unregister(
-    psid: string
-  ) {
-    const userInfo = this.users.find((item) => {
-      return item.psid === psid;
-    })
-
-    if (userInfo !== undefined) {
-       const index = this.users.indexOf(userInfo);
-      if (index > -1) {
-        this.users.splice(index, 1);
-      }
-    } else {
-      throw new Error('unregistered psid');
-    }
+    this._method.sendMessengerTextEvent(this._server, this.info.psid, text);
   }
 }
 

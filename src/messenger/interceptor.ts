@@ -2,16 +2,16 @@ import { InterceptedRequest, RequestInterceptor } from 'node-request-interceptor
 import withDefaultInterceptors from 'node-request-interceptor/lib/presets/default';
 
 import InterceptorInterface from '../interface/interceptor';
-import UserInterface from '../interface/user';
-import { MessengerUserType } from './type';
+import UserCollection from '../interface/userCollection';
+import MessengerUser from './user';
 
-class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
+class MessengerInterceptor implements InterceptorInterface<MessengerUser>{
   interceptor: RequestInterceptor = new RequestInterceptor(withDefaultInterceptors);
   calledRequests: InterceptedRequest[] = [];
-  user: UserInterface<MessengerUserType>;
+  users: UserCollection<MessengerUser>;
 
-  constructor(user: UserInterface<MessengerUserType>) {
-    this.user = user;
+  constructor(users: UserCollection<MessengerUser>) {
+    this.users = users;
   };
 
   use() {
@@ -22,7 +22,7 @@ class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
         // Ex: `/v4.0/${PSID}`
         if (req.url.pathname.match(/^\/v[0-9].[0-9]\/\d{16}$/)) {
           const psid = req.url.pathname.split('/')[2];
-          const userInfo = this.user.getUserInfo(psid);
+          const userInfo = this.users.getUserInfo(psid);
           return {
             status: 200,
             headers: {
@@ -49,12 +49,12 @@ class MessengerInterceptor implements InterceptorInterface<MessengerUserType>{
     })
   }
 
-  response() {
+  getLastReceivedJsonString() {
     return this.calledRequests[this.calledRequests.length - 1].body;
   }
 
-  parse() {
-    const body = this.response();
+  getLastReceivedJsonBody() {
+    const body = this.getLastReceivedJsonString();
     if(body) {
       return JSON.parse(body);
     } else {

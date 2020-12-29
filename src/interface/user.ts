@@ -1,5 +1,8 @@
-export default interface User<T> {
-  users: Array<T>;
-  register(user: T): void;
-  getUserInfo(id: string): T;
+import express from 'express';
+export default interface User<I, M> {
+  info: I;
+  _method: M;
+  _server: express.Application | void;
+
+  sendText(text: string): void;
 }

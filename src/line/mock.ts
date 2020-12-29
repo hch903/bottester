@@ -3,6 +3,7 @@ import request from 'supertest';
 import express from 'express';
 import { LineEventType, LineHttpPostRequestType } from './type';
 
+// 應由外部帶入
 const mockLineChannelSecret = '8999cb96fde2cdffe5da6f533082caa9';
 
 async function sendRequest(

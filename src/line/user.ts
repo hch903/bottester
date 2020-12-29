@@ -1,43 +1,26 @@
-import UserInterface from '../interface/user';
+import express from 'express';
+import User from '../interface/user';
 import { LineUserType } from './type';
+import LineUserMethod from './method';
 
-class LineUser implements UserInterface<LineUserType> {
-  users: LineUserType[] = [];
-
-  getUserInfo(
-    userId: string
+class LineUser implements User<LineUserType, LineUserMethod> {
+  info: LineUserType;
+  _method: LineUserMethod;
+  _server;
+  
+  constructor(
+    userInfo: LineUserType,
+    server: express.Application | void
   ) {
-    const userInfo = this.users.find((item) => {
-      return item.userId === userId;
-    })
-    if (userInfo !== undefined) {
-      return userInfo;
-    } else {
-      throw new Error('unregistered userId');
-    }
+    this.info = userInfo;
+    this._method = new LineUserMethod();
+    this._server = server;
   }
 
-  register(
-    userInfo: LineUserType
+  sendText(
+    text: string
   ) {
-    this.users.push(userInfo);
-  }
-
-  unregister(
-    userId: string
-  ) {
-    const userInfo = this.users.find((item) => {
-      return item.userId === userId;
-    })
-
-    if (userInfo !== undefined) {
-       const index = this.users.indexOf(userInfo);
-      if (index > -1) {
-        this.users.splice(index, 1);
-      }
-    } else {
-      throw new Error('unregistered userId');
-    }
+    this._method.sendLineTextEvent(this._server, this.info.userId, text);
   }
 }
 

@@ -4,33 +4,23 @@ const testing = require('../../dist/index');
 const PSID = '0000000000000000';
 const userId = 'U00000000000000000000000000000000';
 
-const {
-  messengerAssertion,
-  messengerInterceptor,
-  messengerMethod
-} = testing.MessengerSetup();
-
-const {
-  lineAssertion,
-  lineInterceptor,
-  lineMethod
-} = testing.LineSetup();
+const messengerTester = new testing.MessengerTester();
+const lineTester = new testing.LineTester();
 
 beforeEach(() => {
-  messengerInterceptor.use();
-  lineInterceptor.use();
+  const server = bottender.initializeServer();
+  messengerTester.startTest(server);
+  lineTester.endTest(server);
 })
 
 afterEach(() => {
-  messengerInterceptor.restore();
-  lineInterceptor.restore();
+  messengerTester.endTest();
+  lineTester.endTest();  
 });
 
 describe('Hello World', () => {
   // messenger
   it('should reply "Hello World"', async () => {
-    const server = bottender.initializeServer();
-
     await messengerMethod.sendMessengerTextEvent(server, PSID, process.env.MESSENGER_PAGE_ID, "Hi"); 
     const body = messengerInterceptor.parse();
     messengerAssertion.textWouldBe(body, "Hello World!");
@@ -38,8 +28,6 @@ describe('Hello World', () => {
 
   // line
   it('should reply "Hello World"', async () => {
-    const server = bottender.initializeServer();
-    
     await lineMethod.sendLineTextEvent(server, userId, "Hi");
     const body = lineInterceptor.parse();
     lineAssertion.textWouldBe(body, "Hello World!");

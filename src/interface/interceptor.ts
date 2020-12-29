@@ -1,14 +1,14 @@
 import { InterceptedRequest, RequestInterceptor } from 'node-request-interceptor';
-import UserInterface from './user';
+import UserCollection from './userCollection';
 
 export default interface Interceptor<T> {
   calledRequests: InterceptedRequest[];
   interceptor: RequestInterceptor;
 
-  user: UserInterface<T>;
+  users: UserCollection<T>;
 
   use(): void;
   restore(): void;
-  response(): string | undefined;
-  parse(): any;
+  getLastReceivedJsonString(): string | undefined;
+  getLastReceivedJsonBody(): any;
 }
